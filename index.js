@@ -8,14 +8,7 @@ var http = require('http'),
 var app = express();
 
 var url = function (stopId){
-    return 'http://developer.trimet.org/ws/V1/arrivals?locIDs=' + stopId + '&appID=' + TRIMET_KEY;
-}
-
-var getJson = function(xmlResult){
-    var parser = new xml2js.Parser();
-    parser.parseString(xmlResult, function(err, res){
-        console.log(JSON.stringify(res));
-    });
+    return 'http://developer.trimet.org/ws/v2/arrivals?locIDs=' + stopId + '&appID=' + TRIMET_KEY;
 }
 
 var getArrival = function(stopId, callback){
@@ -35,16 +28,12 @@ var getArrival = function(stopId, callback){
 }
 
 var myCallback = function(data){
-    getJson(data);
+    console.log(data);
 }
 
 var handleNexArrivalRequest = function(intent, session, response){
     getArrival(intent.slots.stopId.value, function(data){
-        //Convert Data to JSON
-        var parser = new xml2js.Parser();
-        parser.parseString(data, function(err, res){
-            var jsonData = JSON.stringify(res);
-        });
+       
     })
 }
 
