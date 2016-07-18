@@ -1,0 +1,28 @@
+{
+  "name": "alexa_trnsit_tracker",
+  "version": "1.0.0",
+  "description": "Trimet Transit Tracker for Alexa ",
+  "main": "index.js",
+  "dependencies": {
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadranyi/alexaTransitTracker.git"
+  },
+  "keywords": [
+    "Transit",
+    "Tracker",
+    "Trimet"
+  ],
+  "author": "Samuel S. K. Adranyi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sadranyi/alexaTransitTracker/issues"
+  },
+  "homepage": "https://github.com/sadranyi/alexaTransitTracker#readme"
+}
