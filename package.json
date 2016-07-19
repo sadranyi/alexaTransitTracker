@@ -4,6 +4,7 @@
   "description": "Trimet Transit Tracker for Alexa ",
   "main": "index.js",
   "dependencies": {
+    "moment": "^2.14.1",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {},
