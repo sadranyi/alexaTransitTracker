@@ -6,6 +6,7 @@ var http = require('http'),
     moment = require('moment');
 
 var app = express();
+var cardText;
 
 var url = function (stopId){
     return 'http://developer.trimet.org/ws/v2/arrivals?locIDs=' + stopId + '&appID=' + TRIMET_KEY;
@@ -59,11 +60,19 @@ var handleNexArrivalRequest = function(intent, session, response){
             var location = jsdata.resultSet.location[0];
             var arrivals = jsdata.resultSet.arrival;
 
+            cardText = "Arrivals for " + location.desc + "."
+
             console.log("Arrivals for " + location.desc + ".");
 
             arrivals.forEach(function(arr) {
                 console.log("Bus " + arr.shortSign + " scheduled " + moment(arr.scheduled).calendar(arr.scheduled) + ", estimated arrival " + timeToArrival(arr.scheduled) + ".");
             });
+        }
+        else
+        {
+            var text = 'No arrivals for stop: ' + intent.slots.stopId.value;
+            cardText = text;
+
         }
     })
 }
