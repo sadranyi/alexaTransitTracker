@@ -63,7 +63,7 @@ var handlers = {
                 var location = jsdata.resultSet.location[0];
                 var arrivals = jsdata.resultSet.arrival;
 
-                cardText = "Arrivals for " + replaceSpeech(location.desc, "&", "and") + ", " 
+                cardText = "Arrivals for " + replaceSpeech(replaceSpeech(location.desc, "&", "and"), "TC", "Transit Center") + ", " 
                 + location.dir + ". "
 
                 arrivals.forEach(function(arr) {
@@ -82,7 +82,10 @@ var handlers = {
                 cardText = noStopIdText;
             }
 
-            myintent.emit(':tell', cardText);
+            repromptText = "If you want arrivals for another stop, please say the ID. " +
+            "You can also say stop to exit.";
+
+            myintent.emit(':ask', cardText, repromptText);
         })
     },
 
