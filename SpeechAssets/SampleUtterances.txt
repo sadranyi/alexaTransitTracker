@@ -1,0 +1,12 @@
+GetNextArrivalIntent get next arrival at {stopId}
+GetNextArrivalIntent next arrival at {stopId}
+GetNextArrivalIntent next arrival {stopId}
+GetNextArrivalIntent find next arrival at {stopId}
+GetNextArrivalIntent find arrival at {stopId}
+GetNextArrivalIntent find arrivals at {stopId}
+GetNextArrivalIntent arrivals at {stopId}
+GetNextArrivalIntent get arrival time at {stopId}
+GetNextArrivalIntent arrival time at {stopId}
+GetNextArrivalIntent find arrival time at {stopId}
+GetNextArrivalIntent {stopId} arrivals
+GetNextArrivalIntent {stopId}

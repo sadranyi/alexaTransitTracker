@@ -1,0 +1,22 @@
+{
+  "intents":[
+    {
+    "intent":"GetNextArrivalIntent",
+    "slots":[
+      {
+      "name":"stopId",
+      "type":"NUMBER"
+      }
+    ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+	}
+ ]
+}
