@@ -96,7 +96,7 @@ var handleNexArrivalRequest = function(intent, session, response){
             cardText = errorText;
         }
         else{
-            noStopIdText = 'The Stop ID you requested is invalid. Please say a valid stop ID!';
+            var noStopIdText = 'The Stop ID you requested is invalid. Please say a valid stop ID!';
             cardText = noStopIdText;
         }
 
