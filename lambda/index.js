@@ -28,20 +28,14 @@ exports.handler = function (event, context, callback) {
 };
 
 var newSessionHandlers = {
-    /** Catch-All and Entry Point */
     'NewSession': function(){
         speechText = "Welcome, say a stop ID and I will tell you the arrival schedules";
-        repromptText = "Sorry, which stop ID do you want arrivals for?";
+        repromptText = "For instructions on what you can say, please say help.";
         this.emit(':ask', speechText, repromptText);
     }
 };
 
 var handlers = {
-
-    'LaunchRequest' : function(){
-        this.emit('getWelcomeMessage');
-    },
-
     'SessionEndedRequest' : function () {
         speechText = "";
         repromptText = "";
@@ -71,21 +65,23 @@ var handlers = {
                     + mtz(arr.scheduled).tz('America/Vancouver').format("h mm a") + ", estimated arrival " 
                     + timeToArrival(arr.scheduled) + ". ";
                 });
+
+                repromptText = "If you want arrivals for another stop, please say the ID. " +
+                "You can also say stop to exit.";
+
+                myintent.emit(':tell', cardText, repromptText);
             }
             else if(hasErrors)
             {
                 var errorText = 'The Stop ID you requested is invalid. Please say a valid stop ID!';
                 cardText = errorText;
+                myintent.emit(':ask', cardText, repromptText);
             }else
             {
                 var noStopIdText = 'The Stop ID you requested is invalid. Please say a valid stop ID!';
                 cardText = noStopIdText;
+                myintent.emit(':ask', cardText, repromptText);
             }
-
-            repromptText = "If you want arrivals for another stop, please say the ID. " +
-            "You can also say stop to exit.";
-
-            myintent.emit(':ask', cardText, repromptText);
         })
     },
 
