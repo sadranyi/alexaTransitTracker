@@ -23,27 +23,21 @@ var config = {
 exports.handler = function (event, context, callback) {
     var alexa = Alexa.handler(event, context);
     alexa.APP_ID = config.APP_ID;
-    alexa.registerHandlers(newSessionHandlers, handlers, helperHandlers);
+    alexa.registerHandlers(trackModeHandlers);
     alexa.execute();
 };
 
-var newSessionHandlers = {
-    'NewSession': function(){
-        speechText = "Welcome, say a stop ID and I will tell you the arrival schedules";
-        repromptText = "For instructions on what you can say, please say help.";
+var trackModeHandlers = {
+    'LaunchRequest': function() {
+        speechText = "Welcome to PDX Bus Tracker, I will tell you arrival schedules for bus stops. " + 
+        "Say a stop ID and I will tell you the arrival schedules";
+        repromptText = "For instructions on what you can say, please say help, or say stop to quit.";
         this.emit(':ask', speechText, repromptText);
-    }
-};
-
-var handlers = {
-    'SessionEndedRequest' : function () {
-        speechText = "";
-        repromptText = "";
-        this.emit(':tell', 'Ok, Goodbye!');
     },
 
     /** HANDLE GetNextArrivalIntent */
     'GetNextArrivalIntent' : function () {
+
         var myintent = this;
         var stopIdSlot = this.event.request.intent.slots.stopId.value;
         var stopId = stopIdSlot !== null || stopIdSlot !== undefined ? stopIdSlot : 0;
@@ -66,60 +60,67 @@ var handlers = {
                     + timeToArrival(arr.scheduled) + ". ";
                 });
 
+                cardText += 'Do you want arrivals for another Stop? you can say yes, or say no to quit.';
+
                 repromptText = "If you want arrivals for another stop, please say the ID. " +
                 "You can also say stop to exit.";
-
-                myintent.emit(':tell', cardText, repromptText);
             }
             else if(hasErrors)
             {
                 var errorText = 'The Stop ID you requested is invalid. Please say a valid stop ID!';
                 cardText = errorText;
-                myintent.emit(':ask', cardText, repromptText);
             }else
             {
                 var noStopIdText = 'The Stop ID you requested is invalid. Please say a valid stop ID!';
                 cardText = noStopIdText;
-                myintent.emit(':ask', cardText, repromptText);
             }
+
+            myintent.emit(':ask', cardText, repromptText);
         })
     },
 
-    'AMAZON.HelpIntent' : function(){
+    'AMAZON.HelpIntent': function () {
         speechText = 'You can ask for bus schedules at a given stop ID. ' + 
-        'For example, two two six six, or you can say stop. ' + 
+        'For example, two two six six, or you can say stop to quit. ' + 
         'Now, which Stop would you want arrivals for?';
 
         repromptText = 'I am sorry, I did not understand that. ' + 
-        'You can say two two six six, Or you can say stop. ' + 
+        'Say a stop ID, Or you can say stop to quit. ' + 
         'Now, which Stop would you want arrivals for?';
 
         this.emit(':ask', speechText, repromptText);
     },
 
+    'AMAZON.YesIntent': function() {
+        speechText = 'OK!, please say a stop ID for arrivals, or say no to quit';
+        this.emit(':ask', speechText, speechText);
+    },
+
+    'AMAZON.NoIntent': function() {
+        speechText ='Ok, Thank you for using PDX bus tracker, GoodBye!';
+        this.emit(':tell', speechText);
+    },
+
     'AMAZON.CancelIntent': function () {
-        this.emit('SessionEndedRequest');
+        speechText ='Ok, Thank you for using PDX bus tracker, GoodBye!';
+        this.emit(':tell', speechText);
     },
 
     'AMAZON.StopIntent': function () {
-        this.emit('SessionEndedRequest');
+        speechText ='Ok, Thank you for using PDX bus tracker, GoodBye!';
+        this.emit(':tell', speechText);
+    },
+
+    'SessionEndedRequest' : function () {
+        speechText = "";
+        repromptText = "";
     },
 
     'unhandled' : function(){
-        speechText = 'Sorry, I didn\'t get that. Try saying a stop ID.';
+        speechText = 'Sorry, I didn\'t get that. Try saying a stop ID or say Stop to quit';
         this.emit(':ask', speechText, speechText);
-    },
-};
-
-/** HELPER FUNCTIONS */
-var helperHandlers = {
-    'getWelcomeMessage' : function(){
-        speechText = "Welcome, say a stop ID and I will tell you the arrival schedules";
-        repromptText = "Sorry, which stop ID do you want arrivals for?";
-        this.emit(':ask', speechText, repromptText);
     }
 };
-
 
 /** CALL TRIMET API FOR SCHEDULES */
 var getNextArrivals = function (stopId, callback) {
